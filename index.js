@@ -1,4 +1,15 @@
 import express from "express";
+import mongoose from "mongoose";
+
+mongoose.connect(
+  "mongodb://localhost/bucodelSis",
+  () => {
+    console.log("Connected to database");
+  },
+  (e) => {
+    console.log("Failed to connected due to", e);
+  }
+);
 
 const app = express();
 
