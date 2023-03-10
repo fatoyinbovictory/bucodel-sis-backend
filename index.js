@@ -25,9 +25,6 @@ const PORT = process.env.PORT || 5000;
 // connect to database
 mongoose
   .connect(process.env.MONGO_URI)
-  // .then(() => {
-  //   console.log("Cnnecting to database...");
-  // })
   .then(() => {
     console.log("Successfully Connected to Database");
     app.listen(PORT, () => console.log(`Server running on Port ${PORT}`));
