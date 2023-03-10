@@ -1,6 +1,5 @@
 {
   "name": "bucodel-sis-backend",
-  "type": "module",
   "version": "1.0.0",
   "description": "Backend for the BUCODeL student information system final year project",
   "main": "index.js",
@@ -23,6 +22,7 @@
   "dependencies": {
     "bcrypt": "^5.1.0",
     "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "mongoose": "^6.10.0"
   }
