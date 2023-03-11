@@ -28,10 +28,39 @@ const getStudent = async (req, res) => {
 //approve student application
 const approveStudentApp = async (req, res) => {
   const { id } = req.params;
-  const student = await Student.findById({ id });
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    res.status(404).json({ error: "No student found" });
+  }
+
+  const student = await Student.findOneAndUpdate(
+    { _id: id },
+    {
+      isApproved: true
+    }
+  );
+
   if (!student) {
     res.status(404).json({ error: "No student found" });
   }
+  res.status(200).json(student);
+};
+
+//decline student application
+const declineStudentApp = async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    res.status(404).json({ error: "No student found" });
+  }
+
+  const student = await Student.findOneAndDelete({ _id: id });
+
+  if (!student) {
+    res.status(404).json({ error: "No student found" });
+  }
+
+  res.status(200).json({message: "Deleted successfully"});
 };
 
 //create facilitator
@@ -59,5 +88,6 @@ module.exports = {
   getStudents,
   getStudent,
   approveStudentApp,
-  createFacilitator
+  createFacilitator,
+  declineStudentApp
 };
