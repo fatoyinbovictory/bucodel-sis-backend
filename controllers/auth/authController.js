@@ -97,14 +97,12 @@ const loginFacilitator = async (req, res) => {
     // save user token
     facilitator.token = token;
 
-    res
-      .status(200)
-      .json({
-        message: "Login Successful",
-        email,
-        _id: facilitator._id,
-        token
-      });
+    res.status(200).json({
+      message: "Login Successful",
+      email,
+      _id: facilitator._id,
+      token
+    });
   } catch (e) {
     res.status(400).json({ error: e.message });
   }
