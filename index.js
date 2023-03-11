@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const authRoutes = require("./routes/authRoutes");
 const studentRoutes = require("./routes/studentRoutes");
+const adminRoutes = require("./routes/adminRoutes");
 
 // express app
 const app = express();
@@ -16,9 +17,7 @@ app.use(express.json());
 //routes
 app.use("/api", authRoutes);
 app.use("/api/student", studentRoutes);
-// app.post("api/register", (req, res) => {
-//   console.log(req.body);
-// });
+app.use("/api/admin", adminRoutes);
 
 const PORT = process.env.PORT || 5000;
 
