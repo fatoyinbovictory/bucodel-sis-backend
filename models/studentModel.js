@@ -18,7 +18,6 @@ const studentSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      select: false,
       required: [true, "Please specifiy a password"],
       minLength: [8, "password must be at least 8 characters long"]
       // maxLength: [32, "Password must be less than 32 characters"]

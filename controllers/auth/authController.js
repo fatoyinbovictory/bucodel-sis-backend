@@ -69,7 +69,7 @@ const loginStudent = async (req, res) => {
         expiresIn: "2h"
       }
     );
-    // save user token
+    // save token
     student.token = token;
 
     res
