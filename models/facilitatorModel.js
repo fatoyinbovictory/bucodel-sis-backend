@@ -36,7 +36,7 @@ const facilitatorSchema = new mongoose.Schema(
 );
 
 //static application method
-facilitatorSchema.statics.create = async function (
+facilitatorSchema.statics.createF = async function (
   password,
   firstName,
   lastName,
