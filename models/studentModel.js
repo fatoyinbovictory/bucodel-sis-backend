@@ -19,8 +19,8 @@ const studentSchema = new mongoose.Schema(
     password: {
       type: String,
       required: [true, "Please specifiy a password"],
-      minLength: [8, "password must be at least 8 characters long"],
-      maxLength: [32, "Password must be less than 32 characters"]
+      minLength: [8, "password must be at least 8 characters long"]
+      // maxLength: [32, "Password must be less than 32 characters"]
     },
     dateOfBirth: {
       type: Date
@@ -82,11 +82,11 @@ const studentSchema = new mongoose.Schema(
 
 //static application method
 studentSchema.statics.apply = async function (
+  password,
   firstName,
   lastName,
   dateofBirth,
   sex,
-  password,
   email,
   nationality,
   nameOfGuardian,
@@ -106,18 +106,18 @@ studentSchema.statics.apply = async function (
 
   //hash password
   const salt = await bcrypt.genSalt(10);
-  const hash = await bcrypt.hash(password, salt);
+  const hash = await bcrypt.hash(password.toString(), salt);
 
   //generate matricNo
   const random = Math.floor(1000 + Math.random() * 9000);
   const year = new Date().toLocaleDateString("en", { year: "2-digit" });
   const gen = year.concat("/", random);
+  const bool = false;
 
   const student = await this.create({
+    password: hash,
     firstName,
     lastName,
-    middleName,
-    password: hash,
     dateofBirth,
     sex,
     email,
@@ -128,11 +128,32 @@ studentSchema.statics.apply = async function (
     phone,
     placeOfBirth,
     program,
-    isApproved,
+    isApproved: bool,
     matricNo: gen
   });
+  return student;
+};
+
+studentSchema.statics.loginStudent = async function (email, password) {
+  if (!email || !password) {
+    throw Error("Please fill all fields");
+  }
+
+  const student = await this.findOne({ email });
+
+  if (!student) {
+    throw Error("Incorrect Email");
+  }
+
+  const match = await bcrypt.compare(password, student.password);
+
+  if (!match) {
+    throw Error("Incorrect Password");
+  }
 
   return student;
 };
 
-module.exports = mongoose.model("Student", studentSchema);
+const Student = mongoose.model("Student", studentSchema);
+
+module.exports = { Student };

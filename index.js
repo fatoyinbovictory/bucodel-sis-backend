@@ -3,7 +3,7 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const generalRoutes = require("./routes/generalRoutes");
+const authRoutes = require("./routes/authRoutes");
 const studentRoutes = require("./routes/studentRoutes");
 
 // express app
@@ -14,7 +14,7 @@ app.use(cors());
 app.use(express.json());
 
 //routes
-app.use("/api", generalRoutes);
+app.use("/api", authRoutes);
 app.use("/api/student", studentRoutes);
 // app.post("api/register", (req, res) => {
 //   console.log(req.body);
