@@ -2,6 +2,7 @@ const { Student } = require("../../models/studentModel");
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const { Facilitator } = require("../../models/facilitatorModel");
+const { Admin } = require("../../models/adminModel");
 
 // new student application
 const createStudent = async (req, res) => {
@@ -108,4 +109,28 @@ const loginFacilitator = async (req, res) => {
   }
 };
 
-module.exports = { createStudent, loginStudent, loginFacilitator };
+//admin login
+const loginAdmin = async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const admin = await Admin.loginAdmin(email, password);
+
+    //create token
+    const token = jwt.sign({ admin_id: admin._id, email }, process.env.SECRET, {
+      expiresIn: "2h"
+    });
+    // save user token
+    admin.token = token;
+
+    res.status(200).json({
+      message: "Login Successful",
+      email,
+      _id: admin._id,
+      token
+    });
+  } catch (e) {
+    res.status(400).json({ error: e.message });
+  }
+};
+
+module.exports = { createStudent, loginStudent, loginFacilitator, loginAdmin };

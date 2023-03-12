@@ -1,5 +1,6 @@
 const express = require("express");
 const {
+  createAdmin,
   getStudents,
   getStudent,
   approveStudentApp,
@@ -10,6 +11,9 @@ const {
   getCourses
 } = require("../controllers/adminController");
 const router = express.Router();
+
+//create admin
+router.post("/createAdmin", createAdmin);
 
 //get all students
 router.get("/students", getStudents);

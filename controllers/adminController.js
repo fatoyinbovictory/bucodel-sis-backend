@@ -3,6 +3,28 @@ const { Student } = require("../models/studentModel");
 const { Facilitator } = require("../models/facilitatorModel");
 const { Program } = require("../models/programModel");
 const { Course } = require("../models/courseModel");
+const { Admin } = require("../models/adminModel");
+
+//create admin
+const createAdmin = async (req, res) => {
+  const { password, firstName, lastName, email, phone } = req.body;
+  try {
+    const admin = await Admin.createA(
+      password,
+      firstName,
+      lastName,
+      email,
+      phone
+    );
+    res.status(200).json({
+      message: "Admin created successfully",
+      email,
+      _id: admin._id
+    });
+  } catch (e) {
+    res.status(400).json({ error: e.message });
+  }
+};
 
 //get all students
 const getStudents = async (req, res) => {
@@ -142,7 +164,7 @@ const createCourse = async (req, res) => {
     const addToPrograms = await Program.findByIdAndUpdate(
       { _id: id },
       {
-        $push: { programCourses: course._id  }
+        $push: { programCourses: course._id }
       }
     );
     res.status(200).json({
@@ -173,6 +195,7 @@ const getCourses = async (req, res) => {
 };
 
 module.exports = {
+  createAdmin,
   getStudents,
   getStudent,
   approveStudentApp,

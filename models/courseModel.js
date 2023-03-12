@@ -24,7 +24,9 @@ const courseSchema = new mongoose.Schema([
       required: [true, "Facilitator is required"]
     },
     program: { type: mongoose.Schema.ObjectId, ref: "Program" },
-    students: [{ type: mongoose.Schema.Types.ObjectId, ref: "Student" }]
+    students: [
+      { type: mongoose.Schema.Types.ObjectId, ref: "Student", Score: String }
+    ]
   }
 ]);
 
