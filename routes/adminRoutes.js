@@ -9,7 +9,10 @@ const {
   createProgram,
   createCourse,
   getCourses,
-  createSemester
+  createSemester,
+  getAppStudents,
+  getRegStudents,
+  approveStudentReg
 } = require("../controllers/adminController");
 const router = express.Router();
 
@@ -25,8 +28,17 @@ router.post("/createFacilitator", createFacilitator);
 //get specific student
 router.get("/getStudent/:id", getStudent);
 
+//get students awaiting approval
+router.get("/getAppStudents", getAppStudents);
+
 //approve a student application
 router.patch("/approveStudentApp/:id", approveStudentApp);
+
+//get students awaiting registration
+router.get("/getRegStudents", getRegStudents);
+
+//approve a student registration
+router.patch("/approveStudentReg/:id", approveStudentReg);
 
 //decline student application
 router.delete("/declineStudentApp/:id", declineStudentApp);

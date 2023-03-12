@@ -130,7 +130,6 @@ studentSchema.statics.apply = async function (
   const random = Math.floor(1000 + Math.random() * 9000);
   const year = new Date().toLocaleDateString("en", { year: "2-digit" });
   const gen = year.concat("/", random);
-  const bool = false;
 
   const student = await this.create({
     password: hash,
@@ -146,7 +145,11 @@ studentSchema.statics.apply = async function (
     phone,
     placeOfBirth,
     program,
-    isApproved: bool,
+    isApproved: false,
+    isRegistering: false,
+    isRegistered: false,
+    isPaying: false,
+    isPaid: false,
     matricNo: gen
   });
   return student;

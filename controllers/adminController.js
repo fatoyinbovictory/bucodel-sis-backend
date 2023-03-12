@@ -57,6 +57,22 @@ const getStudent = async (req, res) => {
   res.status(200).json(student);
 };
 
+//get all students awaiting application approval
+const getAppStudents = async (req, res) => {
+  const students = await Student.find({ isApproved: false }).select({
+    firstName: 1,
+    lastName: 1,
+    program: 1,
+    sex: 1
+  });
+
+  if (!students) {
+    res.status(404).json({ error: "No student found" });
+  }
+
+  res.status(200).json(students);
+};
+
 //approve student application
 const approveStudentApp = async (req, res) => {
   const { id } = req.params;
@@ -76,6 +92,44 @@ const approveStudentApp = async (req, res) => {
     res.status(404).json({ error: "No student found" });
   }
   res.status(200).json(student);
+};
+
+//get all students awaiting registration approval
+const getRegStudents = async (req, res) => {
+  const students = await Student.find({ isRegistering: true }).select({
+    firstName: 1,
+    lastName: 1,
+    program: 1,
+    sex: 1
+  });
+
+  if (!students) {
+    res.status(404).json({ error: "No student found" });
+  }
+
+  res.status(200).json(students);
+};
+
+//approve student registration
+const approveStudentReg = async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    res.status(404).json({ error: "No student found" });
+  }
+
+  const student = await Student.findOneAndUpdate(
+    { _id: id },
+    {
+      isRegistering: false,
+      isRegistered: true
+    }
+  );
+
+  if (!student) {
+    res.status(404).json({ error: "No student found" });
+  }
+  res.status(200).json({message: "student registered successfully"});
 };
 
 //decline student application
@@ -195,7 +249,7 @@ const getCourses = async (req, res) => {
   res.status(200).json(courses);
 };
 
-//create a semesterhttp://localhost:5000/api/admin/createSemester
+//create a semester
 const createSemester = async (req, res) => {
   const { session, semester, semesterStart, semesterEnd } = req.body;
   try {
@@ -225,19 +279,8 @@ module.exports = {
   createProgram,
   createCourse,
   getCourses,
-  createSemester
+  createSemester,
+  getAppStudents,
+  getRegStudents,
+  approveStudentReg
 };
-
-// const newCourse = {
-//   name,
-//   courseCode,
-//   creditHours,
-//   courseFacilitator,
-//   program: id
-// };
-// const course = await Program.findByIdAndUpdate(
-//   { _id: id },
-//   {
-//     $push: { programCourses: newCourse }
-//   }
-// );
