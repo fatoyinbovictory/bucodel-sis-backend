@@ -90,7 +90,10 @@ const studentSchema = new mongoose.Schema(
     },
     courses: [
       { type: mongoose.Schema.Types.ObjectId, ref: "Course", unique: true }
-    ]
+    ],
+    semester: {
+      type: String
+    }
   },
   { timestamps: true }
 );

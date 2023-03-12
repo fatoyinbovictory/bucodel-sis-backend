@@ -4,6 +4,7 @@ const { Facilitator } = require("../models/facilitatorModel");
 const { Program } = require("../models/programModel");
 const { Course } = require("../models/courseModel");
 const { Admin } = require("../models/adminModel");
+const { Semester } = require("../models/semesterModel");
 
 //create admin
 const createAdmin = async (req, res) => {
@@ -194,6 +195,26 @@ const getCourses = async (req, res) => {
   res.status(200).json(courses);
 };
 
+//create a semesterhttp://localhost:5000/api/admin/createSemester
+const createSemester = async (req, res) => {
+  const { session, semester, semesterStart, semesterEnd } = req.body;
+  try {
+    await Semester.createSemester(
+      semester,
+      session,
+      semesterStart,
+      semesterEnd
+    );
+    res.status(200).json({
+      message: "Semester created successfully",
+      session,
+      semester
+    });
+  } catch (e) {
+    res.status(400).json({ error: e.message });
+  }
+};
+
 module.exports = {
   createAdmin,
   getStudents,
@@ -203,7 +224,8 @@ module.exports = {
   declineStudentApp,
   createProgram,
   createCourse,
-  getCourses
+  getCourses,
+  createSemester
 };
 
 // const newCourse = {

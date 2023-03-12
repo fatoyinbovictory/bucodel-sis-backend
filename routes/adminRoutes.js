@@ -8,7 +8,8 @@ const {
   declineStudentApp,
   createProgram,
   createCourse,
-  getCourses
+  getCourses,
+  createSemester
 } = require("../controllers/adminController");
 const router = express.Router();
 
@@ -38,5 +39,8 @@ router.post("/createCourse/:id", createCourse);
 
 //get courses for a program
 router.get("/getCourses/:id", getCourses);
+
+//create a semester
+router.post("/createSemester", createSemester);
 
 module.exports = router;
