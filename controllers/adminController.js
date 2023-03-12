@@ -91,7 +91,7 @@ const approveStudentApp = async (req, res) => {
   if (!student) {
     res.status(404).json({ error: "No student found" });
   }
-  res.status(200).json(student);
+  res.status(200).json({ message: "Approved successfully" });
 };
 
 //get all students awaiting registration approval
@@ -132,6 +132,44 @@ const approveStudentReg = async (req, res) => {
   res.status(200).json({message: "student registered successfully"});
 };
 
+//get all students awaiting payment approval
+const getPayStudents = async (req, res) => {
+    const students = await Student.find({ isPaying: true }).select({
+      firstName: 1,
+      lastName: 1,
+      program: 1,
+      sex: 1
+    });
+  
+    if (!students) {
+      res.status(404).json({ error: "No student found" });
+    }
+  
+    res.status(200).json(students);
+  };
+  
+  //approve student payment
+  const approveStudentPay= async (req, res) => {
+    const { id } = req.params;
+  
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      res.status(404).json({ error: "No student found" });
+    }
+  
+    const student = await Student.findOneAndUpdate(
+      { _id: id },
+      {
+        isPaying: false,
+        isPaid: true
+      }
+    );
+  
+    if (!student) {
+      res.status(404).json({ error: "No student found" });
+    }
+    res.status(200).json({message: "student payment approved"});
+  };
+
 //decline student application
 const declineStudentApp = async (req, res) => {
   const { id } = req.params;
@@ -146,7 +184,7 @@ const declineStudentApp = async (req, res) => {
     res.status(404).json({ error: "No student found" });
   }
 
-  res.status(200).json({ message: "Deleted successfully" });
+  res.status(200).json({ message: "Declined and Deleted successfully" });
 };
 
 //create facilitator
@@ -282,5 +320,7 @@ module.exports = {
   createSemester,
   getAppStudents,
   getRegStudents,
-  approveStudentReg
+  approveStudentReg,
+  getPayStudents,
+  approveStudentPay
 };

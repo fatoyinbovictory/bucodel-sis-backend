@@ -12,7 +12,9 @@ const {
   createSemester,
   getAppStudents,
   getRegStudents,
-  approveStudentReg
+  approveStudentReg,
+  getPayStudents,
+  approveStudentPay
 } = require("../controllers/adminController");
 const router = express.Router();
 
@@ -34,14 +36,20 @@ router.get("/getAppStudents", getAppStudents);
 //approve a student application
 router.patch("/approveStudentApp/:id", approveStudentApp);
 
+//decline student application
+router.delete("/declineStudentApp/:id", declineStudentApp);
+
 //get students awaiting registration
 router.get("/getRegStudents", getRegStudents);
 
 //approve a student registration
 router.patch("/approveStudentReg/:id", approveStudentReg);
 
-//decline student application
-router.delete("/declineStudentApp/:id", declineStudentApp);
+//get students awaiting payment approval
+router.get("/getPayStudents", getPayStudents);
+
+//approve a student payment
+router.patch("/approveStudentPay/:id", approveStudentPay);
 
 //create a program
 router.post("/createProgram", createProgram);
