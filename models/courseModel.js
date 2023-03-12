@@ -23,7 +23,8 @@ const courseSchema = new mongoose.Schema([
       ref: "Facilitator",
       required: [true, "Facilitator is required"]
     },
-    program: { type: mongoose.Schema.ObjectId, ref: "Program" }
+    program: { type: mongoose.Schema.ObjectId, ref: "Program" },
+    students: [{ type: mongoose.Schema.Types.ObjectId, ref: "Student" }]
   }
 ]);
 

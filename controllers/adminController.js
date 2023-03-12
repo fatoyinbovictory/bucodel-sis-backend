@@ -139,6 +139,12 @@ const createCourse = async (req, res) => {
       courseFacilitator,
       program
     );
+    const addToPrograms = await Program.findByIdAndUpdate(
+      { _id: id },
+      {
+        $push: { programCourses: course._id  }
+      }
+    );
     res.status(200).json({
       message: "Course created successfully",
       name,
@@ -157,13 +163,13 @@ const getCourses = async (req, res) => {
     res.status(404).json({ error: "No courses found" });
   }
 
-    const courses = await Course.find({ program: id});
+  const courses = await Course.find({ program: id });
 
-    if (!courses) {
-      res.status(404).json({ error: "No courses found" });
-    }
+  if (!courses) {
+    res.status(404).json({ error: "No courses found" });
+  }
 
-    res.status(200).json(courses);
+  res.status(200).json(courses);
 };
 
 module.exports = {

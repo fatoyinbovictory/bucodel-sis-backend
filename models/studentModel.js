@@ -75,7 +75,20 @@ const studentSchema = new mongoose.Schema(
     },
     isApproved: {
       type: Boolean
-    }
+    },
+    isRegistering: {
+      type: Boolean
+    },
+    isRegistered: {
+      type: Boolean
+    },
+    isPaying: {
+      type: Boolean
+    },
+    isPaid: {
+      type: Boolean
+    },
+    courses: [{ type: mongoose.Schema.Types.ObjectId, ref: "Course" }]
   },
   { timestamps: true }
 );
