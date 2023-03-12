@@ -6,7 +6,8 @@ const {
   createFacilitator,
   declineStudentApp,
   createProgram,
-  createCourse
+  createCourse,
+  getCourses
 } = require("../controllers/adminController");
 const router = express.Router();
 
@@ -29,6 +30,9 @@ router.delete("/declineStudentApp/:id", declineStudentApp);
 router.post("/createProgram", createProgram);
 
 //create a course
-router.patch("/createCourse/:id", createCourse);
+router.post("/createCourse/:id", createCourse);
+
+//get courses for a program
+router.get("/getCourses/:id", getCourses);
 
 module.exports = router;

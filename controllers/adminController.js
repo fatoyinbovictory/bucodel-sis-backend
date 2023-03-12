@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const { Student } = require("../models/studentModel");
 const { Facilitator } = require("../models/facilitatorModel");
 const { Program } = require("../models/programModel");
+const { Course } = require("../models/courseModel");
 
 //get all students
 const getStudents = async (req, res) => {
@@ -129,18 +130,14 @@ const createCourse = async (req, res) => {
     res.status(404).json({ error: "No program found" });
   }
   const { name, courseCode, creditHours, courseFacilitator } = req.body;
+  const program = id;
   try {
-    const newCourse = {
+    const course = await Course.createCourse(
       name,
       courseCode,
       creditHours,
-      courseFacilitator
-    };
-    const course = await Program.findByIdAndUpdate(
-      { _id: id },
-      {
-        $push: { programCourses: newCourse }
-      }
+      courseFacilitator,
+      program
     );
     res.status(200).json({
       message: "Course created successfully",
@@ -152,6 +149,23 @@ const createCourse = async (req, res) => {
   }
 };
 
+//get a programs courses
+const getCourses = async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    res.status(404).json({ error: "No courses found" });
+  }
+
+    const courses = await Course.find({ program: id});
+
+    if (!courses) {
+      res.status(404).json({ error: "No courses found" });
+    }
+
+    res.status(200).json(courses);
+};
+
 module.exports = {
   getStudents,
   getStudent,
@@ -159,5 +173,20 @@ module.exports = {
   createFacilitator,
   declineStudentApp,
   createProgram,
-  createCourse
+  createCourse,
+  getCourses
 };
+
+// const newCourse = {
+//   name,
+//   courseCode,
+//   creditHours,
+//   courseFacilitator,
+//   program: id
+// };
+// const course = await Program.findByIdAndUpdate(
+//   { _id: id },
+//   {
+//     $push: { programCourses: newCourse }
+//   }
+// );

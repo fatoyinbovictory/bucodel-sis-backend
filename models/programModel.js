@@ -1,31 +1,5 @@
 const mongoose = require("mongoose");
 
-const courseSchema = new mongoose.Schema([
-  {
-    name: {
-      type: String,
-      required: [true, "Course name is required"],
-      unique: true,
-      minLength: [3, "Name must be at least 3 characters"]
-    },
-    courseCode: {
-      type: String,
-      required: [true, "Course code is required"],
-      minLength: [5, "Course code must be at least 5 characters"],
-      unique: true
-    },
-    creditHours: {
-      type: String,
-      required: [true, "Credit hours is required"]
-    },
-    courseFacilitator: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Facilitator",
-      required: [true, "Facilitator is required"]
-    }
-  }
-]);
-
 const programSchema = new mongoose.Schema(
   {
     name: {
@@ -57,9 +31,7 @@ const programSchema = new mongoose.Schema(
       ref: "Facilitator",
       required: [true, "Porgram head is required"]
     },
-    programCourses: {
-      type: Array || courseSchema
-    }
+    programCourses: [{ type: mongoose.Schema.Types.ObjectId, ref: "Course" }]
   },
   { timestamps: true }
 );
@@ -92,7 +64,7 @@ programSchema.statics.createProgram = async function (
     certification,
     programFee,
     programHead,
-    programCourses: []
+    programCourses
   });
 
   return program;
