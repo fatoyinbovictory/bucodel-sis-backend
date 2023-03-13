@@ -25,7 +25,11 @@ const courseSchema = new mongoose.Schema([
     },
     program: { type: mongoose.Schema.ObjectId, ref: "Program" },
     students: [
-      { type: mongoose.Schema.Types.ObjectId, ref: "Student", Score: String }
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Student",
+        Score: String
+      }
     ]
   }
 ]);

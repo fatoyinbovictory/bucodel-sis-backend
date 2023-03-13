@@ -129,46 +129,46 @@ const approveStudentReg = async (req, res) => {
   if (!student) {
     res.status(404).json({ error: "No student found" });
   }
-  res.status(200).json({message: "student registered successfully"});
+  res.status(200).json({ message: "student registered successfully" });
 };
 
 //get all students awaiting payment approval
 const getPayStudents = async (req, res) => {
-    const students = await Student.find({ isPaying: true }).select({
-      firstName: 1,
-      lastName: 1,
-      program: 1,
-      sex: 1
-    });
-  
-    if (!students) {
-      res.status(404).json({ error: "No student found" });
+  const students = await Student.find({ isPaying: true }).select({
+    firstName: 1,
+    lastName: 1,
+    program: 1,
+    sex: 1
+  });
+
+  if (!students) {
+    res.status(404).json({ error: "No student found" });
+  }
+
+  res.status(200).json(students);
+};
+
+//approve student payment
+const approveStudentPay = async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    res.status(404).json({ error: "No student found" });
+  }
+
+  const student = await Student.findOneAndUpdate(
+    { _id: id },
+    {
+      isPaying: false,
+      isPaid: true
     }
-  
-    res.status(200).json(students);
-  };
-  
-  //approve student payment
-  const approveStudentPay= async (req, res) => {
-    const { id } = req.params;
-  
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      res.status(404).json({ error: "No student found" });
-    }
-  
-    const student = await Student.findOneAndUpdate(
-      { _id: id },
-      {
-        isPaying: false,
-        isPaid: true
-      }
-    );
-  
-    if (!student) {
-      res.status(404).json({ error: "No student found" });
-    }
-    res.status(200).json({message: "student payment approved"});
-  };
+  );
+
+  if (!student) {
+    res.status(404).json({ error: "No student found" });
+  }
+  res.status(200).json({ message: "student payment approved" });
+};
 
 //decline student application
 const declineStudentApp = async (req, res) => {
@@ -254,10 +254,16 @@ const createCourse = async (req, res) => {
       courseFacilitator,
       program
     );
-    const addToPrograms = await Program.findByIdAndUpdate(
+    await Program.findByIdAndUpdate(
       { _id: id },
       {
         $push: { programCourses: course._id }
+      }
+    );
+    await Facilitator.findByIdAndUpdate(
+      { _id: courseFacilitator },
+      {
+        $push: { courses: course._id }
       }
     );
     res.status(200).json({

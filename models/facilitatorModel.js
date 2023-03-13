@@ -30,7 +30,8 @@ const facilitatorSchema = new mongoose.Schema(
       type: String,
       required: [true, "Phone number is required"],
       minLength: [11, "Phone number must be at least 11 characters"]
-    }
+    },
+    courses: [{ type: mongoose.Schema.Types.ObjectId, ref: "Course" }]
   },
   { timestamps: true }
 );

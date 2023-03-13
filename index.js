@@ -6,6 +6,7 @@ const cors = require("cors");
 const authRoutes = require("./routes/authRoutes");
 const studentRoutes = require("./routes/studentRoutes");
 const adminRoutes = require("./routes/adminRoutes");
+const facilitatorRoutes = require("./routes/facilitatorRoutes")
 
 // express app
 const app = express();
@@ -18,6 +19,7 @@ app.use(express.json());
 app.use("/api", authRoutes);
 app.use("/api/student", studentRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/facilitator", facilitatorRoutes);
 
 const PORT = process.env.PORT || 5000;
 
