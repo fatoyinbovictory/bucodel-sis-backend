@@ -4,7 +4,8 @@ const {
   getSpecificCourse,
   addClassLink,
   getFacilitatorDetails,
-  getCourseStudents
+  getCourseStudents,
+  scoreStudent
 } = require("../controllers/facilitatorController");
 const router = express.Router();
 
@@ -14,10 +15,16 @@ router.get("/getDetails/:id", getFacilitatorDetails);
 //view courses
 router.get("/courses/:id", getFacilitatorCourses);
 
+//get a specific course
 router.get("/course/:id", getSpecificCourse);
 
+//add link for a course
 router.patch("/addCourseLink/:id", addClassLink);
 
+//get a course's students
 router.get("/getCourseStudents/:id", getCourseStudents);
+
+//score student
+router.post("/scoreStudent", scoreStudent);
 
 module.exports = router;

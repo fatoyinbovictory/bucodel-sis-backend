@@ -4,6 +4,7 @@ const { Facilitator } = require("../models/facilitatorModel");
 const { Program } = require("../models/programModel");
 const { Course } = require("../models/courseModel");
 const { Admin } = require("../models/adminModel");
+const { Score } = require("../models/scoreModel");
 
 //get facilitator details
 const getFacilitatorDetails = async (req, res) => {
@@ -80,10 +81,22 @@ const getCourseStudents = async (req, res) => {
   res.status(200).json(students);
 };
 
+//score student
+const scoreStudent = async (req, res) => {
+  const { studentId, courseId, score } = req.body;
+  try {
+    await Score.postScore(studentId, courseId, score);
+    res.status(200).json({ message: "Student Scored Successfully" });
+  } catch (error) {
+    res.status(400).json({error: error});
+  }
+};
+
 module.exports = {
   getFacilitatorCourses,
   getSpecificCourse,
   addClassLink,
   getFacilitatorDetails,
-  getCourseStudents
+  getCourseStudents,
+  scoreStudent
 };
