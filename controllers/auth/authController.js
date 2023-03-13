@@ -75,7 +75,7 @@ const loginStudent = async (req, res) => {
 
     res
       .status(200)
-      .json({ message: "Login Successful", email, _id: student._id, token });
+      .json({ message: "Login Successful", email, id: student._id, token });
   } catch (e) {
     res.status(400).json({ error: e.message });
   }
@@ -101,7 +101,7 @@ const loginFacilitator = async (req, res) => {
     res.status(200).json({
       message: "Login Successful",
       email,
-      _id: facilitator._id,
+      id: facilitator._id,
       token
     });
   } catch (e) {
@@ -125,7 +125,7 @@ const loginAdmin = async (req, res) => {
     res.status(200).json({
       message: "Login Successful",
       email,
-      _id: admin._id,
+      id: admin._id,
       token
     });
   } catch (e) {

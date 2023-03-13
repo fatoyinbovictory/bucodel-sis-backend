@@ -93,6 +93,9 @@ const studentSchema = new mongoose.Schema(
     ],
     semester: {
       type: String
+    },
+    cgpa: {
+      type: Number
     }
   },
   { timestamps: true }

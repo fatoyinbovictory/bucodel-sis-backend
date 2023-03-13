@@ -88,7 +88,7 @@ const scoreStudent = async (req, res) => {
     await Score.postScore(studentId, courseId, score);
     res.status(200).json({ message: "Student Scored Successfully" });
   } catch (error) {
-    res.status(400).json({error: error});
+    res.status(400).json({error: error.message});
   }
 };
 
