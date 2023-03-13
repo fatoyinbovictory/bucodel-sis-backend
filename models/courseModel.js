@@ -27,8 +27,7 @@ const courseSchema = new mongoose.Schema([
     students: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Student",
-        Score: String
+        ref: "Student"
       }
     ],
     classLink: { type: String }

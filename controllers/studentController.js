@@ -14,7 +14,6 @@ const addCourse = async (req, res) => {
   ) {
     res.status(404).json({ error: "Student or Course not found" });
   }
-  
   try {
     await Student.findByIdAndUpdate(
       { _id: studentId },
@@ -22,7 +21,7 @@ const addCourse = async (req, res) => {
         $push: { courses: courseId }
       }
     );
-    await Course.findByIdAndUpdate(
+     await Course.findByIdAndUpdate(
       { _id: courseId },
       {
         $push: { students: studentId }
@@ -36,4 +35,4 @@ const addCourse = async (req, res) => {
   }
 };
 
-module.exports = { addCourse };
+module.exports = {addCourse}
