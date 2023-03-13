@@ -88,9 +88,7 @@ const studentSchema = new mongoose.Schema(
     isPaid: {
       type: Boolean
     },
-    courses: [
-      { type: mongoose.Schema.Types.ObjectId, ref: "Course", unique: true }
-    ],
+    courses: [{ type: mongoose.Schema.Types.ObjectId, ref: "Course" }],
     semester: {
       type: String
     }

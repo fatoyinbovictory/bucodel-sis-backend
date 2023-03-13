@@ -30,7 +30,8 @@ const courseSchema = new mongoose.Schema([
         ref: "Student",
         Score: String
       }
-    ]
+    ],
+    classLink: { type: String }
   }
 ]);
 

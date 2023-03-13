@@ -1,11 +1,23 @@
-const express = require('express')
-const router = express.Router()
+const express = require("express");
+const {
+  getFacilitatorCourses,
+  getSpecificCourse,
+  addClassLink,
+  getFacilitatorDetails,
+  getCourseStudents
+} = require("../controllers/facilitatorController");
+const router = express.Router();
 
 //get facilitator details
-router.get('/getdetails', () =>{ })
+router.get("/getDetails/:id", getFacilitatorDetails);
 
 //view courses
-router.get("/courses", getCourse);
+router.get("/courses/:id", getFacilitatorCourses);
 
+router.get("/course/:id", getSpecificCourse);
 
-module.exports = router; 
+router.patch("/addCourseLink/:id", addClassLink);
+
+router.get("/getCourseStudents/:id", getCourseStudents);
+
+module.exports = router;
