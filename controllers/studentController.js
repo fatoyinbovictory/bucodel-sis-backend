@@ -38,6 +38,33 @@ const getStudentDetails = async (req, res) => {
   }
 };
 
+const getStudentDashboard = async (req, res) => {
+  const { id } = req.params;
+  const student = await Student.findById(id).select({
+    firstName: 1,
+    courses: 1,
+    semester: 1,
+    matricNo: 1,
+    program: 1,
+    isApproved: 1
+  });
+  try {
+    if (!student.isApproved) {
+      res.status(400).json({
+        error: "Your application has not been approved, please check back later"
+      });
+    } else {
+      res.status(200).json(student);
+    }
+  } catch (error) {
+    if (!student) {
+      res.status(404).json({ error: "student not found" });
+    } else {
+      res.status(400).json(error.message);
+    }
+  }
+};
+
 //get semesters
 const getSemesters = async (req, res) => {
   const semesters = await Semester.find({});
@@ -151,6 +178,7 @@ const viewResults = async (req, res) => {
 
 module.exports = {
   addCourse,
+  getStudentDashboard,
   getStudentDetails,
   getSemesters,
   selectSemester,

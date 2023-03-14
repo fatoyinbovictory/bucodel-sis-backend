@@ -8,8 +8,12 @@ const {
   viewSelectedCourses,
   submitRegistration,
   feePayment,
-  viewResults
+  viewResults,
+  getStudentDashboard
 } = require("../controllers/studentController");
+
+//get student dashboard
+router.get("/dashboard/:id", getStudentDashboard);
 
 //get student details
 router.get("/getDetails/:id", getStudentDetails);
@@ -30,9 +34,9 @@ router.get("/viewSelectedCourses/:id", viewSelectedCourses);
 router.patch("/submitRegistration/:id", submitRegistration);
 
 //submit fee payment application
-router.patch("/feePayment/:id", feePayment)
+router.patch("/feePayment/:id", feePayment);
 
 //view results
-router.get("/viewResults/:id", viewResults)
+router.get("/viewResults/:id", viewResults);
 
 module.exports = router;
