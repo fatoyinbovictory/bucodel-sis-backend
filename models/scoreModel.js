@@ -14,7 +14,10 @@ const scoreSchema = new mongoose.Schema([
       unique: false,
       required: [true, "Please specify a course"]
     },
-    score: { type: Number, required: [true, "Please specify a score"] }
+    score: { type: Number, required: [true, "Please specify a score"] },
+    grade: {
+      type: String
+    }
   }
 ]);
 
@@ -28,10 +31,31 @@ scoreSchema.statics.postScore = async function (studentId, courseId, score) {
     throw Error("Score cannot be more than 100");
   }
 
+  let grade = "NG";
+
+  switch (true) {
+    case score >= 80:
+      grade = "A";
+      break;
+    case score >= 60:
+      grade = "B";
+      break;
+    case score >= 50:
+      grade = "C";
+      break;
+    case score >= 40:
+      grade = "D";
+      break;
+    default:
+      grade = "F";
+      break;
+  }
+
   const studentScore = await this.create({
     studentId,
     courseId,
-    score
+    score,
+    grade
   });
 
   return studentScore;

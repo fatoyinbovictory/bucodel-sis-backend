@@ -4,6 +4,7 @@ const { Facilitator } = require("../models/facilitatorModel");
 const { Program } = require("../models/programModel");
 const { Course } = require("../models/courseModel");
 const { Semester } = require("../models/semesterModel");
+const { Score } = require("../models/scoreModel");
 
 //get details
 const getStudentDetails = async (req, res) => {
@@ -121,11 +122,40 @@ const submitRegistration = async (req, res) => {
   }
 };
 
+//submit fee payment application
+const feePayment = async (req, res) => {
+  const { id } = req.params;
+  try {
+    await Student.findByIdAndUpdate(id, {
+      isPaying: true
+    });
+    res.status(200).json({ message: "Successful" });
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
+};
+
+//view results
+const viewResults = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const result = await Score.find({ studentId: id }).populate({
+      path: "courseId",
+      select: { name: 1, courseCode: 1, creditHours: 1 }
+    });
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
+};
+
 module.exports = {
   addCourse,
   getStudentDetails,
   getSemesters,
   selectSemester,
   viewSelectedCourses,
-  submitRegistration
+  submitRegistration,
+  feePayment,
+  viewResults
 };

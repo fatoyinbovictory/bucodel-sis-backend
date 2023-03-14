@@ -132,6 +132,23 @@ const approveStudentReg = async (req, res) => {
   res.status(200).json({ message: "student registered successfully" });
 };
 
+const getStudentCourses = async (req, res) => {
+  const { id } = req.params;
+  const courses = await Student.findById(id)
+    .select({
+      courses: 1
+    })
+    .populate({
+      path: "courses",
+      select: { name: 1, courseCode: 1, creditHours: 1 }
+    });
+
+  if (!courses) {
+    res.status(404).json({ message: "No Courses found" });
+  }
+  res.status(200).json(courses);
+};
+
 //get all students awaiting payment approval
 const getPayStudents = async (req, res) => {
   const students = await Student.find({ isPaying: true }).select({
@@ -320,6 +337,7 @@ module.exports = {
   approveStudentApp,
   createFacilitator,
   declineStudentApp,
+  getStudentCourses,
   createProgram,
   createCourse,
   getCourses,

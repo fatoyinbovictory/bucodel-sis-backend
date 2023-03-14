@@ -6,7 +6,9 @@ const {
   selectSemester,
   getSemesters,
   viewSelectedCourses,
-  submitRegistration
+  submitRegistration,
+  feePayment,
+  viewResults
 } = require("../controllers/studentController");
 
 //get student details
@@ -26,5 +28,11 @@ router.get("/viewSelectedCourses/:id", viewSelectedCourses);
 
 //submit registration
 router.patch("/submitRegistration/:id", submitRegistration);
+
+//submit fee payment application
+router.patch("/feePayment/:id", feePayment)
+
+//view results
+router.get("/viewResults/:id", viewResults)
 
 module.exports = router;

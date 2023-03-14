@@ -6,6 +6,7 @@ const {
   approveStudentApp,
   createFacilitator,
   declineStudentApp,
+  getStudentCourses,
   createProgram,
   createCourse,
   getCourses,
@@ -59,6 +60,9 @@ router.post("/createCourse/:id", createCourse);
 
 //get courses for a program
 router.get("/getCourses/:id", getCourses);
+
+//get a specifc student's courses
+router.get("/getStudentCourses/:id", getStudentCourses)
 
 //create a semester
 router.post("/createSemester", createSemester);
