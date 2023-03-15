@@ -9,7 +9,11 @@ const {
   submitRegistration,
   feePayment,
   viewResults,
-  getStudentDashboard
+  getStudentDashboard,
+  getPrograms,
+  getCourses,
+  removeCourse,
+  getFees
 } = require("../controllers/studentController");
 
 //get student dashboard
@@ -18,8 +22,17 @@ router.get("/dashboard/:id", getStudentDashboard);
 //get student details
 router.get("/getDetails/:id", getStudentDetails);
 
+//get programs
+router.get("/programs", getPrograms);
+
+//get a programs courses
+router.get("/getCourses/:id", getCourses);
+
 //register for course
-router.post("/addCourse/", addCourse);
+router.patch("/addCourse/", addCourse);
+
+//remove a course
+router.patch("/removeCourse", removeCourse);
 
 //get available semesters
 router.get("/getSemesters", getSemesters);
@@ -32,6 +45,9 @@ router.get("/viewSelectedCourses/:id", viewSelectedCourses);
 
 //submit registration
 router.patch("/submitRegistration/:id", submitRegistration);
+
+//get fees
+router.post("/getFees", getFees);
 
 //submit fee payment application
 router.patch("/feePayment/:id", feePayment);

@@ -15,12 +15,20 @@ const {
   getRegStudents,
   approveStudentReg,
   getPayStudents,
-  approveStudentPay
+  approveStudentPay,
+  getPrograms,
+  getSpecificProgram
 } = require("../controllers/adminController");
 const router = express.Router();
 
 //create admin
 router.post("/createAdmin", createAdmin);
+
+//get all programs
+router.get("/programs", getPrograms);
+
+//get specific program
+router.get("/program/:id", getSpecificProgram);
 
 //get all students
 router.get("/students", getStudents);
@@ -62,7 +70,7 @@ router.post("/createCourse/:id", createCourse);
 router.get("/getCourses/:id", getCourses);
 
 //get a specifc student's courses
-router.get("/getStudentCourses/:id", getStudentCourses)
+router.get("/getStudentCourses/:id", getStudentCourses);
 
 //create a semester
 router.post("/createSemester", createSemester);

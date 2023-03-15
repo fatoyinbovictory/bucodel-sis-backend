@@ -85,7 +85,7 @@ const selectSemester = async (req, res) => {
     await Student.findByIdAndUpdate(id, { semester: selectedSem });
     res.status(200).json({ message: "Semester successfully selected" });
   } catch (error) {
-    res.status(400).json({error: error.message});
+    res.status(400).json({ error: error.message });
   }
 };
 
@@ -120,6 +120,71 @@ const addCourse = async (req, res) => {
   }
 };
 
+const removeCourse = async (req, res) => {
+  const { studentId, courseId } = req.body;
+
+  if (
+    !mongoose.Types.ObjectId.isValid(studentId) ||
+    !mongoose.Types.ObjectId.isValid(courseId)
+  ) {
+    res.status(404).json({ error: "Student and/or Course not found" });
+  }
+  try {
+    await Student.findByIdAndUpdate(
+      { _id: studentId },
+      {
+        $pull: { courses: courseId }
+      }
+    );
+    await Course.findByIdAndUpdate(
+      { _id: courseId },
+      {
+        $pull: { students: studentId }
+      }
+    );
+    res.status(200).json({
+      message: "Course removed successfully"
+    });
+  } catch (e) {
+    res.status(400).json({ error: e.message });
+  }
+};
+
+//get all programs
+const getPrograms = async (req, res) => {
+  const programs = await Program.find({}).select({
+    name: 1
+  });
+  if (!programs) {
+    res.status(404).json({ error: "No programs found" });
+  }
+  res.status(200).json(programs);
+};
+
+//get a programs courses
+const getCourses = async (req, res) => {
+  const { id } = req.params;
+  const courses = await Program.findById(id)
+    .select({
+      programCourses: 1,
+      name: 1
+    })
+    .populate({
+      path: "programCourses",
+      select: { name: 1, courseCode: 1, creditHours: 1, courseFacilitator: 1 },
+      populate: {
+        path: "courseFacilitator",
+        select: { firstName: 1, lastName: 1 }
+      }
+    });
+
+  if (courses.programCourses.length === 0) {
+    res.status(404).json({ error: "No courses found for this program" });
+  } else {
+    res.status(200).json(courses);
+  }
+};
+
 //view selected courses
 const viewSelectedCourses = async (req, res) => {
   const { id } = req.params;
@@ -129,7 +194,11 @@ const viewSelectedCourses = async (req, res) => {
     })
     .populate({
       path: "courses",
-      select: { name: 1, courseCode: 1, creditHours: 1 }
+      select: { name: 1, courseCode: 1, creditHours: 1 },
+      populate: {
+        path: "courseFacilitator",
+        select: { firstName: 1, lastName: 1 }
+      }
     });
 
   if (!courses) {
@@ -148,6 +217,23 @@ const submitRegistration = async (req, res) => {
     res.status(200).json({ message: "Successful" });
   } catch (error) {
     res.status(400).json(error.message);
+  }
+};
+
+//get fees
+const getFees = async (req, res) => {
+  const { program } = req.body;
+  try {
+    const fee = await Program.findOne({program: program}).select({
+      programFee: 1
+    });
+    if (!fee) {
+      res.status(404).json({ error: "No fees found" });
+    } else {
+      res.status(200).json(fee);
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
   }
 };
 
@@ -180,12 +266,16 @@ const viewResults = async (req, res) => {
 
 module.exports = {
   addCourse,
+  removeCourse,
   getStudentDashboard,
   getStudentDetails,
   getSemesters,
+  getPrograms,
+  getCourses,
   selectSemester,
   viewSelectedCourses,
   submitRegistration,
+  getFees,
   feePayment,
   viewResults
 };

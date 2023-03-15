@@ -63,7 +63,7 @@ const loginStudent = async (req, res) => {
   const { email, password } = req.body;
   try {
     const student = await Student.loginStudent(email, password);
-
+    const program = await Student.findOne({email: email})
     //create token
     const token = jwt.sign(
       { student_id: student._id, email },
@@ -77,7 +77,7 @@ const loginStudent = async (req, res) => {
 
     res
       .status(200)
-      .json({ message: "Login Successful", email, id: student._id, token });
+      .json({email, id: student._id, program: program.name });
   } catch (e) {
     res.status(400).json({ error: e.message });
   }

@@ -27,6 +27,31 @@ const createAdmin = async (req, res) => {
   }
 };
 
+//get all programs
+const getPrograms = async (req, res) => {
+  const programs = await Program.find({}).select({
+    name: 1,
+    programCourses: 1,
+    duration: 1,
+    certification: 1
+  });
+  if (!programs) {
+    res.status(404).json({ error: "No programs found" });
+  }
+  res.status(200).json(programs);
+};
+
+//get a single programs
+const getSpecificProgram = async (req, res) => {
+  const { id } = req.params;
+
+  const program = await Program.findById(id);
+  if (!program) {
+    res.status(404).json({ error: "Program not found" });
+  }
+  res.status(200).json(program);
+};
+
 //get all students
 const getStudents = async (req, res) => {
   const students = await Student.find({}).select({
@@ -332,6 +357,8 @@ const createSemester = async (req, res) => {
 
 module.exports = {
   createAdmin,
+  getPrograms,
+  getSpecificProgram,
   getStudents,
   getStudent,
   approveStudentApp,
