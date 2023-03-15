@@ -19,6 +19,7 @@ const getStudentDetails = async (req, res) => {
     sex: 1,
     nationality: 1,
     address: 1,
+    residence: 1,
     isApproved: 1
   });
   try {
@@ -38,6 +39,7 @@ const getStudentDetails = async (req, res) => {
   }
 };
 
+//display dashboard info
 const getStudentDashboard = async (req, res) => {
   const { id } = req.params;
   const student = await Student.findById(id).select({
@@ -83,7 +85,7 @@ const selectSemester = async (req, res) => {
     await Student.findByIdAndUpdate(id, { semester: selectedSem });
     res.status(200).json({ message: "Semester successfully selected" });
   } catch (error) {
-    res.status(400).json(error.message);
+    res.status(400).json({error: error.message});
   }
 };
 

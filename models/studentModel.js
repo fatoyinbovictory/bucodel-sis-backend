@@ -66,6 +66,10 @@ const studentSchema = new mongoose.Schema(
       type: String,
       required: [true, "Program is required"]
     },
+    residence: {
+      type: String,
+      required: [true, "Residence is required"]
+    },
     previousUni: {
       type: String
     },
@@ -116,6 +120,7 @@ studentSchema.statics.apply = async function (
   phone,
   placeOfBirth,
   program,
+  residence,
   isApproved
 ) {
   const exists = await this.findOne({ email });
@@ -148,6 +153,7 @@ studentSchema.statics.apply = async function (
     phone,
     placeOfBirth,
     program,
+    residence,
     isApproved: false,
     isRegistering: false,
     isRegistered: false,

@@ -18,6 +18,7 @@ const createStudent = async (req, res) => {
     stateOfOrigin,
     address,
     phone,
+    residence,
     placeOfBirth,
     program,
     isApproved
@@ -37,6 +38,7 @@ const createStudent = async (req, res) => {
       phone,
       placeOfBirth,
       program,
+      residence,
       isApproved
     );
     //create token
