@@ -6,11 +6,29 @@ const { Course } = require("../models/courseModel");
 const { Admin } = require("../models/adminModel");
 const { Score } = require("../models/scoreModel");
 
+//display dashboard info
+const getFacDashboard = async (req, res) => {
+  const { id } = req.params;
+  const facilitator = await Facilitator.findById(id).select({
+    firstName: 1,
+    courses: 1,
+    phone: 1,
+    email: 1
+  });
+  if (!facilitator) {
+    res.status(404).json({ error: "Facilitator not found" });
+  }
+  res.status(200).json(facilitator);
+};
+
 //get facilitator details
 const getFacilitatorDetails = async (req, res) => {
   const { id } = req.params;
 
-  const facilitator = await Facilitator.findById(id);
+  const facilitator = await Facilitator.findById(id).populate({
+    path: "courses",
+    select: { name: 1 }
+  });
 
   if (!facilitator) {
     res.status(404).json({ message: "No Facilitator found" });
@@ -88,11 +106,12 @@ const scoreStudent = async (req, res) => {
     await Score.postScore(studentId, courseId, score);
     res.status(200).json({ message: "Student Scored Successfully" });
   } catch (error) {
-    res.status(400).json({error: error.message});
+    res.status(400).json({ error: error.message });
   }
 };
 
 module.exports = {
+  getFacDashboard,
   getFacilitatorCourses,
   getSpecificCourse,
   addClassLink,

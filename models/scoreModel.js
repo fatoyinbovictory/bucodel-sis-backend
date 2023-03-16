@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const uniqueValidator = require('mongoose-unique-validator');
 
 const scoreSchema = new mongoose.Schema([
   {
@@ -22,6 +23,7 @@ const scoreSchema = new mongoose.Schema([
 ]);
 
 scoreSchema.index({ studentId: 1, courseId: 1 }, { unique: true });
+scoreSchema.plugin(uniqueValidator, { message: 'You have already assigned a score to this student' });
 
 scoreSchema.statics.postScore = async function (studentId, courseId, score) {
   if (score < 0) {

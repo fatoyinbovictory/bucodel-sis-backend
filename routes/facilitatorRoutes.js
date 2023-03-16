@@ -1,5 +1,6 @@
 const express = require("express");
 const {
+  getFacDashboard,
   getFacilitatorCourses,
   getSpecificCourse,
   addClassLink,
@@ -8,6 +9,9 @@ const {
   scoreStudent
 } = require("../controllers/facilitatorController");
 const router = express.Router();
+
+//facilitator dashboard
+router.get("/dashboard/:id", getFacDashboard)
 
 //get facilitator details
 router.get("/getDetails/:id", getFacilitatorDetails);
