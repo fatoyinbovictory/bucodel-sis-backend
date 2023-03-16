@@ -17,9 +17,18 @@ const {
   getPayStudents,
   approveStudentPay,
   getPrograms,
-  getSpecificProgram
+  getSpecificProgram,
+  getDashboard,
+  getDetails,
+  getFacIds
 } = require("../controllers/adminController");
 const router = express.Router();
+
+//get dashboard
+router.get("/dashboard/:id", getDashboard);
+
+//get details
+router.get("/getDetails/:id", getDetails);
 
 //create admin
 router.post("/createAdmin", createAdmin);
@@ -32,6 +41,9 @@ router.get("/program/:id", getSpecificProgram);
 
 //get all students
 router.get("/students", getStudents);
+
+//get facilitator ids
+router.get("/facilitatorIds", getFacIds);
 
 //create facilitator
 router.post("/createFacilitator", createFacilitator);

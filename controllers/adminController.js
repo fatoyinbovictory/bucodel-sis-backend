@@ -6,6 +6,55 @@ const { Course } = require("../models/courseModel");
 const { Admin } = require("../models/adminModel");
 const { Semester } = require("../models/semesterModel");
 
+//get dashboard
+const getDashboard = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const adminName = await Admin.findById(id).select({ firstName: 1 });
+    const students = await Student.countDocuments({ isApproved: true });
+    const facilitators = await Facilitator.countDocuments();
+    const programs = await Program.countDocuments();
+    res.status(200).json({
+      adminName,
+      students,
+      programs,
+      facilitators
+    });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+//get details
+const getDetails = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const approvedStudents = await Student.countDocuments({ isApproved: true });
+    const registeredStudents = await Student.countDocuments({
+      isRegistered: true
+    });
+    const appliedStudents = await Student.countDocuments({ isApproved: false });
+    const facilitators = await Facilitator.countDocuments();
+    const programs = await Program.countDocuments();
+    const admin = await Admin.findById(id).select({
+      firstName: 1,
+      lastName: 1,
+      email: 1,
+      phone: 1
+    });
+    res.status(200).json({
+      admin,
+      approvedStudents,
+      registeredStudents,
+      appliedStudents,
+      facilitators,
+      programs
+    });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 //create admin
 const createAdmin = async (req, res) => {
   const { password, firstName, lastName, email, phone } = req.body;
@@ -41,11 +90,19 @@ const getPrograms = async (req, res) => {
   res.status(200).json(programs);
 };
 
-//get a single programs
+//get a single program
 const getSpecificProgram = async (req, res) => {
   const { id } = req.params;
 
-  const program = await Program.findById(id);
+  const program = await Program.findById(id)
+    .populate({
+      path: "programCourses",
+      select: { name: 1, courseCode: 1, creditHours: 1 }
+    })
+    .populate({
+      path: "programHead",
+      select: { firstName: 1, lastName: 1 }
+    });
   if (!program) {
     res.status(404).json({ error: "Program not found" });
   }
@@ -355,10 +412,25 @@ const createSemester = async (req, res) => {
   }
 };
 
+//get facilitator ids
+const getFacIds = async (req, res) => {
+  const facilitators = await Facilitator.find().select({
+    firstName: 1,
+    lastName: 1
+  });
+  if (!facilitators) {
+    res.status(404).json({ error: "No facilitators found" });
+  }
+  res.status(200).json(facilitators);
+};
+
 module.exports = {
+  getDashboard,
   createAdmin,
+  getDetails,
   getPrograms,
   getSpecificProgram,
+  getFacIds,
   getStudents,
   getStudent,
   approveStudentApp,
