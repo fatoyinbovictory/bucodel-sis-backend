@@ -194,7 +194,7 @@ const viewSelectedCourses = async (req, res) => {
     })
     .populate({
       path: "courses",
-      select: { name: 1, courseCode: 1, creditHours: 1 },
+      select: { name: 1, courseCode: 1, creditHours: 1, time: 1 },
       populate: {
         path: "courseFacilitator",
         select: { firstName: 1, lastName: 1 }
@@ -224,7 +224,7 @@ const submitRegistration = async (req, res) => {
 const getFees = async (req, res) => {
   const { program } = req.body;
   try {
-    const fee = await Program.findOne({program: program}).select({
+    const fee = await Program.findOne({ program: program }).select({
       programFee: 1
     });
     if (!fee) {
