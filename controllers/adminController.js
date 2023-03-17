@@ -307,6 +307,18 @@ const createFacilitator = async (req, res) => {
   }
 };
 
+const deleteFacilitator = async (req, res) => {
+  const { facId } = req.body;
+  try {
+    await Facilitator.findOneAndDelete({ _id: facId });
+    res.status(200).json({
+      message: "Facilitator deleted successfully"
+    });
+  } catch (e) {
+    res.status(400).json({ error: e.message });
+  }
+};
+
 //create program
 const createProgram = async (req, res) => {
   const {
@@ -416,7 +428,9 @@ const createSemester = async (req, res) => {
 const getFacIds = async (req, res) => {
   const facilitators = await Facilitator.find().select({
     firstName: 1,
-    lastName: 1
+    lastName: 1,
+    email: 1,
+    phone: 1
   });
   if (!facilitators) {
     res.status(404).json({ error: "No facilitators found" });
@@ -435,6 +449,7 @@ module.exports = {
   getStudent,
   approveStudentApp,
   createFacilitator,
+  deleteFacilitator,
   declineStudentApp,
   getStudentCourses,
   createProgram,

@@ -20,7 +20,8 @@ const {
   getSpecificProgram,
   getDashboard,
   getDetails,
-  getFacIds
+  getFacIds,
+  deleteFacilitator
 } = require("../controllers/adminController");
 const router = express.Router();
 
@@ -47,6 +48,9 @@ router.get("/facilitatorIds", getFacIds);
 
 //create facilitator
 router.post("/createFacilitator", createFacilitator);
+
+//delete facilitator
+router.delete("/deleteFacilitator", deleteFacilitator);
 
 //get specific student
 router.get("/getStudent/:id", getStudent);
