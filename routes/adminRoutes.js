@@ -23,8 +23,10 @@ const {
   getFacIds,
   deleteFacilitator,
   declineStudentReg,
-  declineStudentPay
+  declineStudentPay,
+  addCourseTime
 } = require("../controllers/adminController");
+const { addClassLink } = require("../controllers/facilitatorController");
 const router = express.Router();
 
 //get dashboard
@@ -86,6 +88,9 @@ router.patch("/declineStudentPay/:id", declineStudentPay);
 
 //create a program
 router.post("/createProgram", createProgram);
+
+//add course time
+router.patch("/addCourseTime/:id", addCourseTime);
 
 //create a course
 router.post("/createCourse/:id", createCourse);

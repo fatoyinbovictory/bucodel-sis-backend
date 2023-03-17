@@ -432,6 +432,25 @@ const createCourse = async (req, res) => {
   }
 };
 
+//add course time
+const addCourseTime = async (req, res) => {
+  const { id } = req.params;
+  const { time } = req.body;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    res.status(404).json({ error: "No course found" });
+  }
+  try {
+    await Course.findByIdAndUpdate(id, { time: time });
+
+    res.status(200).json({
+      message: "Course time added successfully"
+    });
+  } catch (e) {
+    res.status(400).json({ error: e.message });
+  }
+};
+
 //get a programs courses
 const getCourses = async (req, res) => {
   const { id } = req.params;
@@ -499,6 +518,7 @@ module.exports = {
   getStudentCourses,
   createProgram,
   createCourse,
+  addCourseTime,
   getCourses,
   createSemester,
   getAppStudents,

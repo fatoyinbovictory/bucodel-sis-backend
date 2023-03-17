@@ -30,7 +30,8 @@ const courseSchema = new mongoose.Schema([
         ref: "Student"
       }
     ],
-    classLink: { type: String }
+    classLink: { type: String },
+    time: { type: String }
   }
 ]);
 
