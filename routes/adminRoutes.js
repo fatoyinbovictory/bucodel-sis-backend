@@ -21,7 +21,9 @@ const {
   getDashboard,
   getDetails,
   getFacIds,
-  deleteFacilitator
+  deleteFacilitator,
+  declineStudentReg,
+  declineStudentPay
 } = require("../controllers/adminController");
 const router = express.Router();
 
@@ -70,11 +72,17 @@ router.get("/getRegStudents", getRegStudents);
 //approve a student registration
 router.patch("/approveStudentReg/:id", approveStudentReg);
 
+//decline student registration
+router.patch("/declineStudentReg/:id", declineStudentReg);
+
 //get students awaiting payment approval
 router.get("/getPayStudents", getPayStudents);
 
 //approve a student payment
 router.patch("/approveStudentPay/:id", approveStudentPay);
+
+//decline student payment
+router.patch("/declineStudentPay/:id", declineStudentPay);
 
 //create a program
 router.post("/createProgram", createProgram);

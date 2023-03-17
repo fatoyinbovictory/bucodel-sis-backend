@@ -66,10 +66,6 @@ const studentSchema = new mongoose.Schema(
       type: String,
       required: [true, "Program is required"]
     },
-    residence: {
-      type: String,
-      required: [true, "Residence is required"]
-    },
     previousUni: {
       type: String
     },
@@ -92,9 +88,7 @@ const studentSchema = new mongoose.Schema(
     isPaid: {
       type: Boolean
     },
-    courses: [
-      { type: mongoose.Schema.Types.ObjectId, ref: "Course" }
-    ],
+    courses: [{ type: mongoose.Schema.Types.ObjectId, ref: "Course" }],
     semester: {
       type: String
     },
@@ -120,7 +114,6 @@ studentSchema.statics.apply = async function (
   phone,
   placeOfBirth,
   program,
-  residence,
   isApproved
 ) {
   const exists = await this.findOne({ email });
@@ -153,7 +146,6 @@ studentSchema.statics.apply = async function (
     phone,
     placeOfBirth,
     program,
-    residence,
     isApproved: false,
     isRegistering: false,
     isRegistered: false,
