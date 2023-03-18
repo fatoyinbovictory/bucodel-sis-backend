@@ -94,7 +94,16 @@ const studentSchema = new mongoose.Schema(
     },
     cgpa: {
       type: Number
-    }
+    },
+    pathToSsce: {
+      type: String,
+      required: [true, "Your SSCE file is required"]
+    },
+    pathToUtme: {
+      type: String,
+      required: [true, "Your UTME file is required"]
+    },
+    pathToFee: { type: String }
   },
   { timestamps: true }
 );
@@ -104,6 +113,7 @@ studentSchema.statics.apply = async function (
   password,
   firstName,
   lastName,
+  middleName,
   dateofBirth,
   sex,
   email,
@@ -114,7 +124,9 @@ studentSchema.statics.apply = async function (
   phone,
   placeOfBirth,
   program,
-  isApproved
+  isApproved,
+  pathToSsce,
+  pathToUtme
 ) {
   const exists = await this.findOne({ email });
 
@@ -136,6 +148,7 @@ studentSchema.statics.apply = async function (
     password: hash,
     firstName,
     lastName,
+    middleName,
     dateofBirth,
     sex,
     email,
@@ -151,7 +164,9 @@ studentSchema.statics.apply = async function (
     isRegistered: false,
     isPaying: false,
     isPaid: false,
-    matricNo: gen
+    matricNo: gen,
+    pathToSsce,
+    pathToUtme
   });
   return student;
 };

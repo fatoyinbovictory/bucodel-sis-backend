@@ -1,12 +1,13 @@
 // imports
 require("dotenv").config();
 const express = require("express");
+const fileupload = require("express-fileupload");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const authRoutes = require("./routes/authRoutes");
 const studentRoutes = require("./routes/studentRoutes");
 const adminRoutes = require("./routes/adminRoutes");
-const facilitatorRoutes = require("./routes/facilitatorRoutes")
+const facilitatorRoutes = require("./routes/facilitatorRoutes");
 
 // express app
 const app = express();
@@ -14,6 +15,8 @@ const app = express();
 // middleware
 app.use(cors());
 app.use(express.json());
+app.use(fileupload());
+app.use("/uploads", express.static("uploads"));
 
 //routes
 app.use("/api", authRoutes);

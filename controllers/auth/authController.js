@@ -10,6 +10,7 @@ const createStudent = async (req, res) => {
     password,
     firstName,
     lastName,
+    middleName,
     dateofBirth,
     sex,
     email,
@@ -20,13 +21,31 @@ const createStudent = async (req, res) => {
     phone,
     placeOfBirth,
     program,
-    isApproved
+    isApproved,
+    pathToSsce,
+    pathToUtme
   } = req.body;
+  const ssceFile = req.files.ssceFile;
+  const ssceFilename = ssceFile.name;
+  const utmeFile = req.files.utmeFile;
+  const utmeFilename = utmeFile.name;
+  const filepath = "uploads/applications/";
+  ssceFile.mv(`${filepath}${ssceFilename}`, (error) => {
+    if (error) {
+      res.status(500).json({ message: error });
+    }
+  });
+  utmeFile.mv(`${filepath}${utmeFilename}`, (error) => {
+    if (error) {
+      res.status(500).json({ message: error });
+    }
+  });
   try {
     const student = await Student.apply(
       password,
       firstName,
       lastName,
+      middleName,
       dateofBirth,
       sex,
       email,
@@ -37,7 +56,9 @@ const createStudent = async (req, res) => {
       phone,
       placeOfBirth,
       program,
-      isApproved
+      isApproved,
+      pathToSsce,
+      pathToUtme
     );
     //create token
     const token = jwt.sign(
@@ -61,7 +82,7 @@ const loginStudent = async (req, res) => {
   const { email, password } = req.body;
   try {
     const student = await Student.loginStudent(email, password);
-    const program = await Student.findOne({email: email})
+    const program = await Student.findOne({ email: email });
     //create token
     const token = jwt.sign(
       { student_id: student._id, email },
@@ -73,9 +94,7 @@ const loginStudent = async (req, res) => {
     // save token
     student.token = token;
 
-    res
-      .status(200)
-      .json({email, id: student._id, program: program.name });
+    res.status(200).json({ email, id: student._id, program: program.name });
   } catch (e) {
     res.status(400).json({ error: e.message });
   }
