@@ -1,4 +1,6 @@
+require("dotenv").config();
 const mongoose = require("mongoose");
+const nodemailer = require("nodemailer");
 const { Student } = require("../models/studentModel");
 const { Facilitator } = require("../models/facilitatorModel");
 const { Program } = require("../models/programModel");
@@ -158,6 +160,7 @@ const getAppStudents = async (req, res) => {
 //approve student application
 const approveStudentApp = async (req, res) => {
   const { id } = req.params;
+  const { studentEmail } = req.body;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     res.status(404).json({ error: "No student found" });
@@ -174,6 +177,30 @@ const approveStudentApp = async (req, res) => {
     res.status(404).json({ error: "No student found" });
   }
   res.status(200).json({ message: "Approved successfully" });
+
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.GMAIL_USER,
+      pass: process.env.GMAIL_PASSWORD
+    }
+  });
+
+  const mailOptions = {
+    from: "bucodel.sis@gmail.com",
+    to: studentEmail,
+    subject: "Application to BUCODeL",
+    text: "Congratulations! Your application has been approved. You can now login to your account and begin your online learning experience!"
+  };
+
+  transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log("Email sent: " + info.response);
+      // do something useful
+    }
+  });
 };
 
 //get all students awaiting registration approval
@@ -317,6 +344,7 @@ const declineStudentPay = async (req, res) => {
 //decline student application
 const declineStudentApp = async (req, res) => {
   const { id } = req.params;
+  const { studentEmail, declineMessage } = req.body;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     res.status(404).json({ error: "No student found" });
@@ -329,6 +357,31 @@ const declineStudentApp = async (req, res) => {
   }
 
   res.status(200).json({ message: "Declined and Deleted successfully" });
+
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.GMAIL_USER,
+      pass: process.env.GMAIL_PASSWORD
+    }
+  });
+
+  const mailOptions = {
+    from: "bucodel.sis@gmail.com",
+    to: studentEmail,
+    subject: "Application to BUCODeL",
+    text:
+      `Unfortunately, your application to BUCODeL has been denied due to: ${declineMessage}`
+  };
+
+  transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log("Email sent: " + info.response);
+      // do something useful
+    }
+  });
 };
 
 //create facilitator

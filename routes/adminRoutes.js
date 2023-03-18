@@ -66,7 +66,7 @@ router.get("/getAppStudents", getAppStudents);
 router.patch("/approveStudentApp/:id", approveStudentApp);
 
 //decline student application
-router.delete("/declineStudentApp/:id", declineStudentApp);
+router.post("/declineStudentApp/:id", declineStudentApp);
 
 //get students awaiting registration
 router.get("/getRegStudents", getRegStudents);
