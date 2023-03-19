@@ -213,7 +213,7 @@ const getSpecificCourse = async (req, res) => {
 
   const course = await Course.findById(id).populate({
     path: "courseFacilitator",
-    select: {firstName: 1, lastName: 1}
+    select: { firstName: 1, lastName: 1 }
   });
 
   if (!course) {
@@ -247,6 +247,26 @@ const getFees = async (req, res) => {
       res.status(404).json({ error: "No fees found" });
     } else {
       res.status(200).json(fee);
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+//get registration status
+const getRegStatus = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const student = await Student.findById(id).select({
+      isRegistering: 1,
+      isRegistered: 1,
+      isPaying: 1,
+      isPaid: 1
+    });
+    if (!student) {
+      res.status(404).json({ error: "No student found" });
+    } else {
+      res.status(200).json(student);
     }
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -303,6 +323,7 @@ module.exports = {
   viewSelectedCourses,
   submitRegistration,
   getFees,
+  getRegStatus,
   feePayment,
   viewResults
 };

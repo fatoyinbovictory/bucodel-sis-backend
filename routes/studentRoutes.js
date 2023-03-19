@@ -14,7 +14,8 @@ const {
   getCourses,
   removeCourse,
   getFees,
-  getSpecificCourse
+  getSpecificCourse,
+  getRegStatus
 } = require("../controllers/studentController");
 
 //get student dashboard
@@ -52,6 +53,9 @@ router.patch("/submitRegistration/:id", submitRegistration);
 
 //get fees
 router.post("/getFees", getFees);
+
+//get Registration status
+router.get('/getStatus/:id', getRegStatus)
 
 //submit fee payment application
 router.patch("/feePayment/:id", feePayment);
