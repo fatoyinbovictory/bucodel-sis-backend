@@ -31,6 +31,3 @@
     "nodemailer": "^6.9.1"
   }
 }
-"scripts": {
-    "start": "node your-script.js"
-}
