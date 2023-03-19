@@ -13,7 +13,8 @@ const {
   getPrograms,
   getCourses,
   removeCourse,
-  getFees
+  getFees,
+  getSpecificCourse
 } = require("../controllers/studentController");
 
 //get student dashboard
@@ -27,6 +28,9 @@ router.get("/programs", getPrograms);
 
 //get a programs courses
 router.get("/getCourses/:id", getCourses);
+
+//get specific course
+router.get("/course/:id", getSpecificCourse)
 
 //register for course
 router.patch("/addCourse/", addCourse);

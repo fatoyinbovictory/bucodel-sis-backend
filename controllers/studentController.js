@@ -207,6 +207,22 @@ const viewSelectedCourses = async (req, res) => {
   res.status(200).json(courses);
 };
 
+//get a specific course
+const getSpecificCourse = async (req, res) => {
+  const { id } = req.params;
+
+  const course = await Course.findById(id).populate({
+    path: "courseFacilitator",
+    select: {firstName: 1, lastName: 1}
+  });
+
+  if (!course) {
+    res.status(404).json({ message: "No Course found" });
+  }
+
+  res.status(200).json(course);
+};
+
 //submit registration
 const submitRegistration = async (req, res) => {
   const { id } = req.params;
@@ -282,6 +298,7 @@ module.exports = {
   getSemesters,
   getPrograms,
   getCourses,
+  getSpecificCourse,
   selectSemester,
   viewSelectedCourses,
   submitRegistration,
