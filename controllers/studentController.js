@@ -20,12 +20,13 @@ const getStudentDetails = async (req, res) => {
     nationality: 1,
     address: 1,
     residence: 1,
-    isApproved: 1
+    isApproved: 1,
   });
   try {
     if (!student.isApproved) {
       res.status(400).json({
-        error: "Your application has not been approved, please check back later"
+        error:
+          "Your application has not been approved, please check back later",
       });
     } else {
       res.status(200).json(student);
@@ -48,12 +49,13 @@ const getStudentDashboard = async (req, res) => {
     semester: 1,
     matricNo: 1,
     program: 1,
-    isApproved: 1
+    isApproved: 1,
   });
   try {
     if (!student.isApproved) {
       res.status(400).json({
-        error: "Your application has not been approved, please check back later"
+        error:
+          "Your application has not been approved, please check back later",
       });
     } else {
       res.status(200).json(student);
@@ -103,17 +105,17 @@ const addCourse = async (req, res) => {
     await Student.findByIdAndUpdate(
       { _id: studentId },
       {
-        $push: { courses: courseId }
+        $push: { courses: courseId },
       }
     );
     await Course.findByIdAndUpdate(
       { _id: courseId },
       {
-        $push: { students: studentId }
+        $push: { students: studentId },
       }
     );
     res.status(200).json({
-      message: "Course added successfully"
+      message: "Course added successfully",
     });
   } catch (e) {
     res.status(400).json({ error: e.message });
@@ -133,17 +135,17 @@ const removeCourse = async (req, res) => {
     await Student.findByIdAndUpdate(
       { _id: studentId },
       {
-        $pull: { courses: courseId }
+        $pull: { courses: courseId },
       }
     );
     await Course.findByIdAndUpdate(
       { _id: courseId },
       {
-        $pull: { students: studentId }
+        $pull: { students: studentId },
       }
     );
     res.status(200).json({
-      message: "Course removed successfully"
+      message: "Course removed successfully",
     });
   } catch (e) {
     res.status(400).json({ error: e.message });
@@ -153,7 +155,7 @@ const removeCourse = async (req, res) => {
 //get all programs
 const getPrograms = async (req, res) => {
   const programs = await Program.find({}).select({
-    name: 1
+    name: 1,
   });
   if (!programs) {
     res.status(404).json({ error: "No programs found" });
@@ -167,15 +169,15 @@ const getCourses = async (req, res) => {
   const courses = await Program.findById(id)
     .select({
       programCourses: 1,
-      name: 1
+      name: 1,
     })
     .populate({
       path: "programCourses",
       select: { name: 1, courseCode: 1, creditHours: 1, courseFacilitator: 1 },
       populate: {
         path: "courseFacilitator",
-        select: { firstName: 1, lastName: 1 }
-      }
+        select: { firstName: 1, lastName: 1 },
+      },
     });
 
   if (courses.programCourses.length === 0) {
@@ -190,15 +192,15 @@ const viewSelectedCourses = async (req, res) => {
   const { id } = req.params;
   const courses = await Student.findById(id)
     .select({
-      courses: 1
+      courses: 1,
     })
     .populate({
       path: "courses",
       select: { name: 1, courseCode: 1, creditHours: 1, time: 1 },
       populate: {
         path: "courseFacilitator",
-        select: { firstName: 1, lastName: 1 }
-      }
+        select: { firstName: 1, lastName: 1 },
+      },
     });
 
   if (!courses) {
@@ -213,7 +215,7 @@ const getSpecificCourse = async (req, res) => {
 
   const course = await Course.findById(id).populate({
     path: "courseFacilitator",
-    select: { firstName: 1, lastName: 1 }
+    select: { firstName: 1, lastName: 1 },
   });
 
   if (!course) {
@@ -228,7 +230,7 @@ const submitRegistration = async (req, res) => {
   const { id } = req.params;
   try {
     await Student.findByIdAndUpdate(id, {
-      isRegistering: true
+      isRegistering: true,
     });
     res.status(200).json({ message: "Successful" });
   } catch (error) {
@@ -241,7 +243,7 @@ const getFees = async (req, res) => {
   const { program } = req.body;
   try {
     const fee = await Program.findOne({ program: program }).select({
-      programFee: 1
+      programFee: 1,
     });
     if (!fee) {
       res.status(404).json({ error: "No fees found" });
@@ -261,7 +263,7 @@ const getRegStatus = async (req, res) => {
       isRegistering: 1,
       isRegistered: 1,
       isPaying: 1,
-      isPaid: 1
+      isPaid: 1,
     });
     if (!student) {
       res.status(404).json({ error: "No student found" });
@@ -288,11 +290,25 @@ const feePayment = async (req, res) => {
   try {
     await Student.findByIdAndUpdate(id, {
       isPaying: true,
-      pathToFee: pathToFee
+      pathToFee: pathToFee,
     });
     res.status(200).json({ message: "Successful" });
   } catch (error) {
-    res.status(400).json(error.message);
+    res.status(400).json({ error: error.message });
+  }
+};
+
+//result overview
+const resultOverview = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const result = await Student.findById(id).select({
+      semester: 1,
+      courses: 1,
+    });
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
   }
 };
 
@@ -302,11 +318,11 @@ const viewResults = async (req, res) => {
   try {
     const result = await Score.find({ studentId: id }).populate({
       path: "courseId",
-      select: { name: 1, courseCode: 1, creditHours: 1 }
+      select: { name: 1, courseCode: 1, creditHours: 1 },
     });
     res.status(200).json(result);
   } catch (error) {
-    res.status(400).json(error.message);
+    res.status(400).json({ error: error.message });
   }
 };
 
@@ -325,5 +341,6 @@ module.exports = {
   getFees,
   getRegStatus,
   feePayment,
-  viewResults
+  resultOverview,
+  viewResults,
 };
