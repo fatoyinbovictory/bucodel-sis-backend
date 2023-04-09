@@ -24,7 +24,10 @@ const {
   deleteFacilitator,
   declineStudentReg,
   declineStudentPay,
-  addCourseTime
+  addCourseTime,
+  viewSemesters,
+  makeSemActive,
+  endSem
 } = require("../controllers/adminController");
 const { addClassLink } = require("../controllers/facilitatorController");
 const router = express.Router();
@@ -103,5 +106,14 @@ router.get("/getStudentCourses/:id", getStudentCourses);
 
 //create a semester
 router.post("/createSemester", createSemester);
+
+//view semesters
+router.get("/viewSemesters", viewSemesters)
+
+//make semester active
+router.patch("/makeSemActive/:id", makeSemActive)
+
+//end semester
+router.patch("/endSemester/:id", endSem)
 
 module.exports = router;

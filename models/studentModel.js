@@ -24,7 +24,6 @@ const studentSchema = new mongoose.Schema(
     },
     dateOfBirth: {
       type: Date
-      // required: [true, "Date of birth is required"]
     },
     sex: {
       type: String,
@@ -99,10 +98,6 @@ const studentSchema = new mongoose.Schema(
       type: String,
       required: [true, "Your SSCE file is required"]
     },
-    pathToUtme: {
-      type: String,
-      required: [true, "Your UTME file is required"]
-    },
     pathToFee: { type: String }
   },
   { timestamps: true }
@@ -166,7 +161,6 @@ studentSchema.statics.apply = async function (
     isPaid: false,
     matricNo: gen,
     pathToSsce,
-    pathToUtme
   });
   return student;
 };

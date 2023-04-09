@@ -370,8 +370,7 @@ const declineStudentApp = async (req, res) => {
     from: "bucodel.sis@gmail.com",
     to: studentEmail,
     subject: "Application to BUCODeL",
-    text:
-      `Unfortunately, your application to BUCODeL has been denied due to: ${declineMessage}`
+    text: `Unfortunately, your application to BUCODeL has been denied due to: ${declineMessage}`
   };
 
   transporter.sendMail(mailOptions, function (error, info) {
@@ -541,6 +540,38 @@ const createSemester = async (req, res) => {
   }
 };
 
+//view semesters
+const viewSemesters = async (req, res) => {
+  try {
+    const semesters = await Semester.find();
+    res.status(200).json(semesters);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+//make semester active
+const makeSemActive = async (req, res) => {
+  const { id } = req.params;
+  try {
+    await Semester.findByIdAndUpdate(id, { isActive: true });
+    res.status(200).json({ message: "Activation Successful" });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+//end semester
+const endSem = async (req, res) => {
+  const { id } = req.params;
+  try {
+    await Semester.findByIdAndUpdate(id, { isActive: false });
+    res.status(200).json({ message: "Semester End Successful" });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 //get facilitator ids
 const getFacIds = async (req, res) => {
   const facilitators = await Facilitator.find().select({
@@ -580,5 +611,8 @@ module.exports = {
   declineStudentReg,
   getPayStudents,
   approveStudentPay,
-  declineStudentPay
+  declineStudentPay,
+  viewSemesters,
+  makeSemActive,
+  endSem
 };

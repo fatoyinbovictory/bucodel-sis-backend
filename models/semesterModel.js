@@ -18,6 +18,9 @@ const semesterSchema = new mongoose.Schema(
     semesterEnd: {
       type: Date,
       required: [true, "Please specifiy a semsester end date"]
+    },
+    isActive: {
+      type: Boolean,
     }
   }
 );

@@ -71,7 +71,7 @@ const getStudentDashboard = async (req, res) => {
 
 //get semesters
 const getSemesters = async (req, res) => {
-  const semesters = await Semester.find({});
+  const semesters = await Semester.find({isActive: true});
   if (!semesters) {
     res.status(404).json({ error: "No semesters founf" });
   }

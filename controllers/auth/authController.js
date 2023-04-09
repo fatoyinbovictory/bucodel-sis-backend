@@ -27,15 +27,8 @@ const createStudent = async (req, res) => {
   } = req.body;
   const ssceFile = req.files.ssceFile;
   const ssceFilename = ssceFile.name;
-  const utmeFile = req.files.utmeFile;
-  const utmeFilename = utmeFile.name;
   const filepath = "uploads/applications/";
   ssceFile.mv(`${filepath}${ssceFilename}`, (error) => {
-    if (error) {
-      res.status(500).json({ message: error });
-    }
-  });
-  utmeFile.mv(`${filepath}${utmeFilename}`, (error) => {
     if (error) {
       res.status(500).json({ message: error });
     }
@@ -58,7 +51,6 @@ const createStudent = async (req, res) => {
       program,
       isApproved,
       pathToSsce,
-      pathToUtme
     );
     //create token
     const token = jwt.sign(
