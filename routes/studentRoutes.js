@@ -65,6 +65,6 @@ router.patch("/feePayment/:id", feePayment);
 router.get("/resultOverview/:id", resultOverview)
 
 //view results
-router.get("/viewResults/:id", viewResults);
+router.post("/viewResults/:id", viewResults);
 
 module.exports = router;

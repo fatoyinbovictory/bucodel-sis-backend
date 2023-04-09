@@ -91,6 +91,11 @@ const studentSchema = new mongoose.Schema(
     semester: {
       type: String
     },
+    semesterId: {
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: "Semester",
+      required: [true, "Please specify a Semeseter"]
+    },
     cgpa: {
       type: Number
     },
@@ -121,7 +126,6 @@ studentSchema.statics.apply = async function (
   program,
   isApproved,
   pathToSsce,
-  pathToUtme
 ) {
   const exists = await this.findOne({ email });
 

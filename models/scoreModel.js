@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const uniqueValidator = require("mongoose-unique-validator");
+const { Semester } = require("../models/semesterModel");
 
 const scoreSchema = new mongoose.Schema([
   {
@@ -15,10 +16,10 @@ const scoreSchema = new mongoose.Schema([
       unique: false,
       required: [true, "Please specify a course"]
     },
-    semeesterId: {
+    semesterId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Semester",
-      required: [true, "Please specify a Semeseter"]
+      required: [true, "This student has not fully registered for the semester"]
     },
     score: { type: Number, required: [true, "Please specify a score"] },
     grade: {
@@ -68,11 +69,16 @@ scoreSchema.statics.postScore = async function (studentId, courseId, score) {
       break;
   }
 
+  const sem = await Semester.findOne({ isActive: true }).select({
+    _id: 1
+  });
+
   const studentScore = await this.create({
     studentId,
     courseId,
     score,
     grade,
+    semesterId: sem,
     gradePoint
   });
 

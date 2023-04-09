@@ -91,7 +91,17 @@ const getCourseStudents = async (req, res) => {
     })
     .populate({
       path: "students",
-      select: { firstName: 1, lastName: 1, program: 1, matricNo: 1 }
+      select: {
+        firstName: 1,
+        lastName: 1,
+        program: 1,
+        matricNo: 1,
+        semesterId: 1
+      },
+      populate: {
+        path: "semesterId",
+        select: { isActive: 1 }
+      }
     });
   if (!students) {
     res.status(404).json({ error: "No Students found" });
@@ -101,9 +111,9 @@ const getCourseStudents = async (req, res) => {
 
 //score student
 const scoreStudent = async (req, res) => {
-  const { studentId, courseId, score } = req.body;
+  const { studentId, courseId, score, semesterId } = req.body;
   try {
-    await Score.postScore(studentId, courseId, score);
+    await Score.postScore(studentId, courseId, score, semesterId);
     res.status(200).json({ message: "Student Scored Successfully" });
   } catch (error) {
     res.status(400).json({ error: error.message });
