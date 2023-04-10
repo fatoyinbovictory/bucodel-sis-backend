@@ -279,19 +279,11 @@ const getRegStatus = async (req, res) => {
 //submit fee payment application
 const feePayment = async (req, res) => {
   const { id } = req.params;
-  const { pathToFee } = req.body;
-  const feeFile = req.files.feeFile;
-  const feeFilename = req.files.feeFile.name;
-  const filepath = "uploads/fees/";
-  feeFile.mv(`${filepath}${feeFilename}`, (error) => {
-    if (error) {
-      res.status(500).json({ message: error });
-    }
-  });
+  const { feePaid } = req.body;
   try {
     await Student.findByIdAndUpdate(id, {
       isPaying: true,
-      pathToFee: pathToFee
+      feePaid
     });
     res.status(200).json({ message: "Successful" });
   } catch (error) {

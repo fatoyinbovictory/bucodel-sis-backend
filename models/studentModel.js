@@ -103,7 +103,7 @@ const studentSchema = new mongoose.Schema(
       type: String,
       required: [true, "Your SSCE file is required"]
     },
-    pathToFee: { type: String }
+    feePaid: { type: Number }
   },
   { timestamps: true }
 );

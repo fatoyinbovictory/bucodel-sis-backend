@@ -7,6 +7,7 @@ const { Program } = require("../models/programModel");
 const { Course } = require("../models/courseModel");
 const { Admin } = require("../models/adminModel");
 const { Semester } = require("../models/semesterModel");
+const { Newsroom } = require("../models/NewsroomModel");
 
 //get dashboard
 const getDashboard = async (req, res) => {
@@ -586,6 +587,76 @@ const getFacIds = async (req, res) => {
   res.status(200).json(facilitators);
 };
 
+//view all news posts
+const viewAllNews = async (req, res) => {
+  try {
+    const news = await Newsroom.find().select({
+      heading: 1,
+      author: 1,
+      bodyPreview: 1,
+      createdAt: 1
+    });
+    res.status(200).json(news);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+//view specifc news post
+const viewNews = async (req, res) => {
+  const { id } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    res.status(404).json({ error: "News not found" });
+  }
+  try {
+    const news = await Newsroom.findById(id).select({
+      heading: 1,
+      author: 1,
+      subHeading: 1,
+      body: 1,
+      createdAt: 1,
+      updatedAt: 1
+    });
+    res.status(200).json(news);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+//create news post
+const createNews = async (req, res) => {
+  const { heading, subHeading, author, body } = req.body;
+  try {
+    await Newsroom.postNews(heading, subHeading, author, body);
+    res.status(200).json({ message: "News posted successfully" });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+//update news post
+const updateNews = async (req, res) => {
+  const { id } = req.params;
+  const { heading, subHeading, author, body } = req.body;
+  try {
+    await Newsroom.findByIdAndUpdate(id, { heading, subHeading, author, body });
+    res.status(200).json({ message: "News updated successfully" });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+//delete news post
+const deleteNews = async (req, res) => {
+  const { id } = req.params;
+  try {
+    await Newsroom.findByIdAndDelete(id);
+    res.status(200).json({ message: "News deleted successfully" });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 module.exports = {
   getDashboard,
   createAdmin,
@@ -614,5 +685,10 @@ module.exports = {
   declineStudentPay,
   viewSemesters,
   makeSemActive,
-  endSem
+  endSem,
+  viewNews,
+  viewAllNews,
+  createNews,
+  updateNews,
+  deleteNews
 };

@@ -27,7 +27,12 @@ const {
   addCourseTime,
   viewSemesters,
   makeSemActive,
-  endSem
+  endSem,
+  createNews,
+  viewAllNews,
+  viewNews,
+  updateNews,
+  deleteNews
 } = require("../controllers/adminController");
 const { addClassLink } = require("../controllers/facilitatorController");
 const router = express.Router();
@@ -108,12 +113,27 @@ router.get("/getStudentCourses/:id", getStudentCourses);
 router.post("/createSemester", createSemester);
 
 //view semesters
-router.get("/viewSemesters", viewSemesters)
+router.get("/viewSemesters", viewSemesters);
 
 //make semester active
-router.patch("/makeSemActive/:id", makeSemActive)
+router.patch("/makeSemActive/:id", makeSemActive);
 
 //end semester
-router.patch("/endSemester/:id", endSem)
+router.patch("/endSemester/:id", endSem);
+
+//view all news posts
+router.get("/viewAllNews", viewAllNews);
+
+//view specific news post
+router.get("/viewNews/:id", viewNews);
+
+//create news post
+router.post("/postNews", createNews);
+
+//update news post
+router.patch("/updateNews/:id", updateNews);
+
+//delete news post
+router.delete("/deleteNews/:id", deleteNews);
 
 module.exports = router;

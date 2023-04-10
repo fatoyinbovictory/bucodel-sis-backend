@@ -1,9 +1,7 @@
 const mongoose = require("mongoose");
 const { Student } = require("../models/studentModel");
 const { Facilitator } = require("../models/facilitatorModel");
-const { Program } = require("../models/programModel");
 const { Course } = require("../models/courseModel");
-const { Admin } = require("../models/adminModel");
 const { Score } = require("../models/scoreModel");
 
 //display dashboard info
