@@ -5,6 +5,7 @@ const { Program } = require("../models/programModel");
 const { Course } = require("../models/courseModel");
 const { Semester } = require("../models/semesterModel");
 const { Score } = require("../models/scoreModel");
+const { Newsroom } = require("../models/NewsroomModel");
 
 //get details
 const getStudentDetails = async (req, res) => {
@@ -330,6 +331,43 @@ const viewResults = async (req, res) => {
   }
 };
 
+//view all news posts
+const viewAllNews = async (req, res) => {
+  try {
+    const news = await Newsroom.find().select({
+      heading: 1,
+      author: 1,
+      bodyPreview: 1,
+      createdAt: 1
+    });
+    res.status(200).json(news);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+//view specifc news post
+const viewNews = async (req, res) => {
+  const { id } = req.params;
+  try {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      res.status(404).json({ error: "News not found" });
+    } else {
+      const news = await Newsroom.findById(id).select({
+        heading: 1,
+        author: 1,
+        subHeading: 1,
+        body: 1,
+        createdAt: 1,
+        updatedAt: 1
+      });
+      res.status(200).json(news);
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 module.exports = {
   addCourse,
   removeCourse,
@@ -346,5 +384,7 @@ module.exports = {
   getRegStatus,
   feePayment,
   resultOverview,
-  viewResults
+  viewResults,
+  viewAllNews,
+  viewNews
 };

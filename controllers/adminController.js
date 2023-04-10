@@ -605,19 +605,20 @@ const viewAllNews = async (req, res) => {
 //view specifc news post
 const viewNews = async (req, res) => {
   const { id } = req.params;
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    res.status(404).json({ error: "News not found" });
-  }
   try {
-    const news = await Newsroom.findById(id).select({
-      heading: 1,
-      author: 1,
-      subHeading: 1,
-      body: 1,
-      createdAt: 1,
-      updatedAt: 1
-    });
-    res.status(200).json(news);
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      res.status(404).json({ error: "News not found" });
+    } else {
+      const news = await Newsroom.findById(id).select({
+        heading: 1,
+        author: 1,
+        subHeading: 1,
+        body: 1,
+        createdAt: 1,
+        updatedAt: 1
+      });
+      res.status(200).json(news);
+    }
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

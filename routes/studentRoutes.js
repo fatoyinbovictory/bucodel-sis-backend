@@ -16,7 +16,9 @@ const {
   getFees,
   getSpecificCourse,
   getRegStatus,
-  resultOverview
+  resultOverview,
+  viewNews,
+  viewAllNews
 } = require("../controllers/studentController");
 
 //get student dashboard
@@ -66,5 +68,11 @@ router.get("/resultOverview/:id", resultOverview)
 
 //view results
 router.post("/viewResults/:id", viewResults);
+
+//view all news posts
+router.get("/viewAllNews", viewAllNews);
+
+//view specific news post
+router.get("/viewNews/:id", viewNews);
 
 module.exports = router;
