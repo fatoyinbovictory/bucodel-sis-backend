@@ -1,6 +1,9 @@
 {
   "name": "bucodel-sis-backend",
-  "version": "1.0.0",
+  "version": "0.9.0",
+  "engines": {
+    "node": ">=19.7.0"
+  },
   "description": "Backend for the BUCODeL student information system final year project",
   "main": "index.js",
   "scripts": {
