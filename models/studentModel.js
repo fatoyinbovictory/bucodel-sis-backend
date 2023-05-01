@@ -169,6 +169,66 @@ studentSchema.statics.apply = async function (
   return student;
 };
 
+studentSchema.statics.applyAsAdmin = async function (
+  password,
+  firstName,
+  lastName,
+  middleName,
+  dateofBirth,
+  sex,
+  email,
+  nationality,
+  nameOfGuardian,
+  stateOfOrigin,
+  address,
+  phone,
+  placeOfBirth,
+  program,
+  isApproved,
+  pathToSsce,
+) {
+  const exists = await this.findOne({ email });
+
+  //check if email is already used
+  if (exists) {
+    throw Error("Email already exists");
+  }
+
+  //hash password
+  const salt = await bcrypt.genSalt(10);
+  const hash = await bcrypt.hash(password.toString(), salt);
+
+  //generate matricNo
+  const random = Math.floor(1000 + Math.random() * 9000);
+  const year = new Date().toLocaleDateString("en", { year: "2-digit" });
+  const gen = year.concat("/", random);
+
+  const student = await this.create({
+    password: hash,
+    firstName,
+    lastName,
+    middleName,
+    dateofBirth,
+    sex,
+    email,
+    nationality,
+    nameOfGuardian,
+    stateOfOrigin,
+    address,
+    phone,
+    placeOfBirth,
+    program,
+    isApproved: true,
+    isRegistering: false,
+    isRegistered: false,
+    isPaying: false,
+    isPaid: false,
+    matricNo: gen,
+    pathToSsce,
+  });
+  return student;
+};
+
 studentSchema.statics.loginStudent = async function (email, password) {
   if (!email || !password) {
     throw Error("Please fill all fields");

@@ -658,6 +658,64 @@ const deleteNews = async (req, res) => {
   }
 };
 
+//create student account
+const createStudent = async (req, res) => {
+  const {
+    password,
+    firstName,
+    lastName,
+    middleName,
+    dateofBirth,
+    sex,
+    email,
+    nationality,
+    nameOfGuardian,
+    stateOfOrigin,
+    address,
+    phone,
+    placeOfBirth,
+    program,
+    isApproved,
+    pathToSsce
+  } = req.body;
+
+  try {
+    if (req.files) {
+      const ssceFile = req.files.ssceFile;
+      const ssceFilename = ssceFile.name;
+      const filepath = "uploads/applications/";
+      ssceFile.mv(`${filepath}${ssceFilename}`, (error) => {
+        if (error) {
+          res.status(500).json({ message: error });
+        }
+      });
+      const student = await Student.applyAsAdmin(
+        password,
+        firstName,
+        lastName,
+        middleName,
+        dateofBirth,
+        sex,
+        email,
+        nationality,
+        nameOfGuardian,
+        stateOfOrigin,
+        address,
+        phone,
+        placeOfBirth,
+        program,
+        isApproved,
+        pathToSsce
+      );
+      res.status(200).json({ email, _id: student._id });
+    } else {
+      res.status(400).json({ error: "Please upload your SSCE result" });
+    }
+  } catch (e) {
+    res.status(400).json({ error: e.message });
+  }
+};
+
 module.exports = {
   getDashboard,
   createAdmin,
@@ -691,5 +749,6 @@ module.exports = {
   viewAllNews,
   createNews,
   updateNews,
-  deleteNews
+  deleteNews,
+  createStudent
 };

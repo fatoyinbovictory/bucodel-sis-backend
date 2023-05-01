@@ -32,9 +32,9 @@ const {
   viewAllNews,
   viewNews,
   updateNews,
-  deleteNews
+  deleteNews,
+  createStudent
 } = require("../controllers/adminController");
-const { addClassLink } = require("../controllers/facilitatorController");
 const router = express.Router();
 
 //get dashboard
@@ -135,5 +135,7 @@ router.patch("/updateNews/:id", updateNews);
 
 //delete news post
 router.delete("/deleteNews/:id", deleteNews);
+
+router.post("/createStudent", createStudent);
 
 module.exports = router;
